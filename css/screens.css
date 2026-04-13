@@ -1,0 +1,18 @@
+
+.screen-home.active{
+  display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.logo-home{width:min(72vw, 360px);height:min(72vw, 360px)}
+.screen-tools.active{padding:24px}
+.logo-tool{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:min(60vw, 300px);height:min(60vw,300px);
+}
+.tool-top{top:16%}
+.tool-bottom{bottom:14%}
+@media (min-width:768px){
+  .logo-home{width:min(44vw, 420px);height:min(44vw, 420px)}
+  .logo-tool{width:min(34vw, 300px);height:min(34vw,300px)}
+  .tool-top{top:12%}
+  .tool-bottom{bottom:12%}
+}

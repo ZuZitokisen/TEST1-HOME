@@ -1,0 +1,18 @@
+
+:root{
+  --bg:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --panel:#ffffff;
+  --shadow:0 10px 30px rgba(15,23,42,.08);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Hiragino Sans","Yu Gothic UI",sans-serif;background:var(--bg);color:var(--text)}
+body{overflow:hidden}
+button,input,select,textarea{font:inherit}
+img{display:block;max-width:100%}
+.hidden{display:none!important}
+.app{position:relative;min-height:100dvh;background:#fff}
+.screen{position:absolute;inset:0;display:none}
+.screen.active{display:block}
