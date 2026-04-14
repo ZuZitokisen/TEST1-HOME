@@ -1,5 +1,5 @@
 .screen-home.active{
-  display:flex;align-items:center;justify-content:center;padding:24px;background:#000;
+  display:flex;align-items:center;justify-content:center;padding:24px;background:#fff;
 }
 .logo-home{width:min(76vw, 380px);height:min(76vw, 380px)}
 .screen-tools{background:#000;overflow:hidden}
@@ -11,7 +11,7 @@
 .tool-top{top:16%}
 .tool-bottom{bottom:14%}
 .screen-tool-frame{background:#fff;display:none}
-.screen-tool-frame.active{background:#fff;display:block}
+.screen-tool-frame.active{background:#fff;display:block;padding:0;width:100%;height:100%;}
 @media (min-width:768px){
   .logo-home{width:min(48vw, 460px);height:min(48vw, 460px)}
   .logo-tool{width:min(34vw, 300px);height:min(34vw,300px)}
