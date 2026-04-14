@@ -125,3 +125,15 @@ window.TTBBridge = (() => {
 
   return { postToTool, broadcastSettings, setupToolDom };
 })();
+window.addEventListener('message', (event) => {
+  const data = event.data;
+  if(!data || data.source !== 'TTB_TOOL') return;
+  if(data.type === 'TTB_PERMISSION_STATUS_UPDATED') {
+    try {
+      const settings = window.TTBStorage.loadSettings();
+      if(data.permission === 'calendar') settings.calendarPermissionStatus = data.status;
+      if(data.permission === 'photo') settings.photoPermissionStatus = data.status;
+      window.TTBStorage.saveSettings(settings);
+    } catch(e){}
+  }
+});

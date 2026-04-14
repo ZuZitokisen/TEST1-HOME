@@ -10,7 +10,8 @@
 }
 .tool-top{top:16%}
 .tool-bottom{bottom:14%}
-.screen-tool-frame,.screen-tool-frame.active{background:#fff;display:block}
+.screen-tool-frame{background:#fff;display:none}
+.screen-tool-frame.active{background:#fff;display:block}
 @media (min-width:768px){
   .logo-home{width:min(48vw, 460px);height:min(48vw, 460px)}
   .logo-tool{width:min(34vw, 300px);height:min(34vw,300px)}
