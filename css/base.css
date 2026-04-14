@@ -1,6 +1,6 @@
 
 :root{
-  --bg:#ffffff;
+  --bg:#000000;
   --text:#111827;
   --muted:#6b7280;
   --line:#e5e7eb;
@@ -13,6 +13,6 @@ body{overflow:hidden}
 button,input,select,textarea{font:inherit}
 img{display:block;max-width:100%}
 .hidden{display:none!important}
-.app{position:relative;min-height:100dvh;background:#fff}
-.screen{position:absolute;inset:0;display:none}
-.screen.active{display:block}
+.app{position:relative;min-height:100dvh;background:#000}
+.screen{position:absolute;inset:0;display:none;opacity:0;transition:opacity .32s ease}
+.screen.active{display:block;opacity:1}

@@ -1,20 +1,17 @@
-
 (function(){
   const settingsBody = document.getElementById('settingsBody');
   const settingsModal = document.getElementById('settingsModal');
   const settingsTitle = document.getElementById('settingsTitle');
-  const dropdownMenu = document.getElementById('dropdownMenu');
   let currentTool = null;
 
   function buildSettings(tool){
     const settings = window.TTBStorage.loadSettings();
     const isTimeMarker = tool === 'timemarker';
     const isTreca = tool === 'treca';
-    const title = isTreca ? 'Tokimeki Toreca Maker 設定' : 'Tokimeki Time Marker 設定';
-    settingsTitle.textContent = title;
+    settingsTitle.textContent = isTreca ? 'Tokimeki Toreca Maker 設定' : 'Tokimeki Time Marker 設定';
     settingsBody.innerHTML = '';
-
     const rows = [];
+
     if (isTreca) {
       rows.push({
         label: '写真ライブラリ権限',
@@ -31,6 +28,7 @@
         actions: [{ label: '出力デモ', type: 'primary', onClick: () => window.TTBShare.beginTrecaExportDemo() }]
       });
     }
+
     if (isTimeMarker) {
       rows.push({
         label: 'カレンダー権限',
@@ -124,51 +122,33 @@
     });
   }
 
-  function closeDropdown(){ dropdownMenu.classList.add('hidden'); dropdownMenu.setAttribute('aria-hidden', 'true'); }
-  function openDropdown(tool, anchor){
+  function openSettings(tool){
     currentTool = tool;
-    const r = anchor.getBoundingClientRect();
-    dropdownMenu.style.left = `${Math.max(12, r.left)}px`;
-    dropdownMenu.style.top = `${r.bottom + 8}px`;
-    dropdownMenu.classList.remove('hidden');
-    dropdownMenu.setAttribute('aria-hidden', 'false');
+    buildSettings(tool);
+    settingsModal.classList.remove('hidden');
   }
+  function closeSettings(){ settingsModal.classList.add('hidden'); }
+  window.TTBApp = { openSettings, closeSettings };
 
   window.addEventListener('DOMContentLoaded', () => {
     window.TTBRouter.init();
     window.TTBRouter.go('home');
 
-    document.getElementById('home39Button').addEventListener('click', e => {
-      window.TTBUI.animateTap(e.currentTarget, () => window.TTBRouter.go('tools'));
+    const homeBtn = document.getElementById('home33Button');
+    const tool38 = document.getElementById('tool38Button');
+    const tool40 = document.getElementById('tool40Button');
+    const toolScreen = document.getElementById('toolSelectScreen');
+
+    homeBtn.addEventListener('click', e => {
+      window.TTBUI.animateTap(e.currentTarget, () => window.TTBRouter.go('tools'), 430);
     });
-    document.getElementById('tool38Button').addEventListener('click', e => {
-      window.TTBUI.animateTap(e.currentTarget, () => window.TTBRouter.go('treca'));
+    tool38.addEventListener('click', e => {
+      window.TTBUI.animateToolChoice(toolScreen, e.currentTarget, tool40, () => window.TTBRouter.go('treca'));
     });
-    document.getElementById('tool40Button').addEventListener('click', e => {
-      window.TTBUI.animateTap(e.currentTarget, () => window.TTBRouter.go('timemarker'));
+    tool40.addEventListener('click', e => {
+      window.TTBUI.animateToolChoice(toolScreen, e.currentTarget, tool38, () => window.TTBRouter.go('timemarker'));
     });
 
-    document.querySelectorAll('[data-menu-button]').forEach(btn => {
-      btn.addEventListener('click', () => openDropdown(btn.dataset.menuButton, btn));
-    });
-
-    dropdownMenu.addEventListener('click', e => {
-      const action = e.target.closest('[data-menu-action]')?.dataset.menuAction;
-      if (!action) return;
-      if (action === 'home') {
-        settingsModal.classList.add('hidden');
-        window.TTBRouter.go('home');
-      }
-      if (action === 'settings') {
-        buildSettings(currentTool);
-        settingsModal.classList.remove('hidden');
-      }
-      closeDropdown();
-    });
-
-    document.getElementById('settingsCloseBtn').addEventListener('click', () => settingsModal.classList.add('hidden'));
-    document.addEventListener('click', e => {
-      if (!e.target.closest('[data-menu-button]') && !e.target.closest('#dropdownMenu')) closeDropdown();
-    });
+    document.getElementById('settingsCloseBtn').addEventListener('click', closeSettings);
   });
 })();
