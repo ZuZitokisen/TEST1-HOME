@@ -34,6 +34,14 @@ window.TTBUI = (() => {
       cb?.();
     }, 430);
   }
+  function animateScreenFadeOut(screenEl, cb, wait = 280){
+    if(!screenEl){ cb?.(); return; }
+    screenEl.classList.add('screen-fading-out');
+    setTimeout(() => {
+      screenEl.classList.remove('screen-fading-out');
+      cb?.();
+    }, wait);
+  }
   function showPermissionModal({ title, message, onOpenSettings }){
     const modal = document.getElementById('permissionModal');
     document.getElementById('permissionTitle').textContent = title;
@@ -47,5 +55,5 @@ window.TTBUI = (() => {
       onOpenSettings?.();
     };
   }
-  return { showToast, setLoading, animateTap, animateToolChoice, showPermissionModal };
+  return { showToast, setLoading, animateTap, animateToolChoice, animateScreenFadeOut, showPermissionModal };
 })();
