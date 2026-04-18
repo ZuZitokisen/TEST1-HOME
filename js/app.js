@@ -4,11 +4,8 @@
   const settingsTitle = document.getElementById('settingsTitle');
   let currentTool = null;
 
-  async function buildSettings(tool){
+  function buildSettings(tool){
     const settings = window.TTBStorage.loadSettings();
-    const calendarPermission = await window.TTBPermissions.checkPermission('calendar');
-    const photoPermission = await window.TTBPermissions.checkPermission('photo');
-    const syncStatus = window.TTBCalendarSync?.getStatus?.() || { calendarName:'Time Marker Sync', syncedCount:0 };
     const isTimeMarker = tool === 'timemarker';
     const isTreca = tool === 'treca';
     settingsTitle.textContent = isTreca ? 'Tokimeki Toreca Maker 設定' : 'Tokimeki Time Marker 設定';
@@ -18,22 +15,12 @@
     if (isTreca) {
       rows.push({
         label: '写真ライブラリ権限',
-        note: `現在 ${photoPermission} です。画像選択時に利用します。`,
-        custom: (() => {
-          const wrap = document.createElement('div');
-          wrap.className = 'settings-actions';
-          const toggle = document.createElement('button');
-          toggle.className = photoPermission === '許可' ? 'primary-btn' : 'secondary-btn';
-          toggle.textContent = photoPermission === '許可' ? '写真権限 許可' : '写真権限 未許可';
-          toggle.onclick = async () => {
-            if(photoPermission === '許可') await window.TTBPermissions.revokePermission('photo');
-            else await window.TTBPermissions.requestPermission('photo');
-            window.TTBBridge?.broadcastSettings();
-            buildSettings(tool);
-          };
-          wrap.append(toggle);
-          return wrap;
-        })()
+        note: '初回画像選択時に要求します。拒否時は設定アプリへ誘導します。',
+        actions: [{ label: '権限案内を表示', type: 'secondary', onClick: () => window.TTBUI.showPermissionModal({
+          title: '写真ライブラリの権限が必要です',
+          message: '画像を選択するには写真ライブラリへのアクセスを許可してください。',
+          onOpenSettings: window.TTBPermissions.openAppSettings
+        }) }]
       });
       rows.push({
         label: '出力',
@@ -45,30 +32,16 @@
     if (isTimeMarker) {
       rows.push({
         label: 'カレンダー権限',
-        note: `現在 ${calendarPermission} です。端末カレンダー同期で利用します。`,
-        custom: (() => {
-          const wrap = document.createElement('div');
-          wrap.className = 'settings-actions';
-          const toggle = document.createElement('button');
-          toggle.className = calendarPermission === '許可' ? 'primary-btn' : 'secondary-btn';
-          toggle.textContent = calendarPermission === '許可' ? 'カレンダー権限 許可' : 'カレンダー権限 未許可';
-          toggle.onclick = async () => {
-            if(calendarPermission === '許可') await window.TTBPermissions.revokePermission('calendar');
-            else await window.TTBPermissions.requestPermission('calendar');
-            window.TTBBridge?.broadcastSettings();
-            buildSettings(tool);
-          };
-          const settingsBtn = document.createElement('button');
-          settingsBtn.className = 'secondary-btn';
-          settingsBtn.textContent = '設定アプリ';
-          settingsBtn.onclick = () => window.TTBPermissions.openAppSettings();
-          wrap.append(toggle, settingsBtn);
-          return wrap;
-        })()
+        note: '初回同期時に要求します。拒否時は設定アプリへ誘導します。',
+        actions: [{ label: '権限案内を表示', type: 'secondary', onClick: () => window.TTBUI.showPermissionModal({
+          title: 'カレンダーの権限が必要です',
+          message: '本体カレンダーへ反映するにはカレンダーアクセスを許可してください。',
+          onOpenSettings: window.TTBPermissions.openAppSettings
+        }) }]
       });
       rows.push({
         label: '自動同期',
-        note: settings.timeMarkerAutoSync ? '現在オンです。保存・編集・削除時に同期します。' : '現在オフです。25CONECTで手動同期できます。',
+        note: settings.timeMarkerAutoSync ? '現在オンです。保存時に自動同期します。' : '現在オフです。25CONECTで手動同期できます。',
         custom: (() => {
           const wrap = document.createElement('div');
           wrap.className = 'settings-actions';
@@ -82,15 +55,15 @@
           };
           const retry = document.createElement('button');
           retry.className = 'secondary-btn';
-          retry.textContent = '同期状況';
-          retry.onclick = () => window.TTBUI.showToast(`${syncStatus.calendarName} / 同期済み ${syncStatus.syncedCount}件`);
+          retry.textContent = '再同期';
+          retry.onclick = () => window.TTBUI.showToast('オフライン時は同期できません。接続後に再試行してください。');
           wrap.append(toggle, retry);
           return wrap;
         })()
       });
       rows.push({
         label: '専用カレンダー',
-        note: `${syncStatus.calendarName} を利用します。初回同期時に自動作成します。同期済み ${syncStatus.syncedCount} 件。`
+        note: '反映先は Time Marker Sync です。初回同期時に自動作成します。'
       });
     }
 

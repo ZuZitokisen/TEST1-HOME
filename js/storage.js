@@ -44,6 +44,6 @@ window.TTBStorage = (() => {
     removeToolState(tool){ removeRaw(TOOL_KEYS[tool]); },
     loadSettings(){ return { ...defaultSettings(), ...(loadRaw(TOOL_KEYS.settings) || {}) }; },
     saveSettings(data){ saveRaw(TOOL_KEYS.settings, { ...defaultSettings(), ...data }); },
-    resetTool(tool){ removeRaw(TOOL_KEYS[tool]); if(tool === 'timemarker'){ try { localStorage.removeItem('ttb.calendar.sync.v1'); } catch(e){} } },
+    resetTool(tool){ removeRaw(TOOL_KEYS[tool]); },
   };
 })();
